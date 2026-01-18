@@ -18,7 +18,7 @@ const contacts = [
     icon: MessageCircle,
     label: "WhatsApp",
     value: "Enviar mensagem",
-    href: "https://www.instagram.com/leticiasmirelli"
+    href: "https://wa.me/5543984479229"
   }
 ];
 

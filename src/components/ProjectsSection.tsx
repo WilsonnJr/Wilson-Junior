@@ -1,12 +1,36 @@
-import { Building2, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 const companies = [
-  "MRV",
-  "PLAENGE",
-  "BRAVO",
-  "PIEMONTE",
-  "YTICON",
-  "YOSHII"
+  {
+    name: "MRV",
+    logo: "https://logodownload.org/wp-content/uploads/2014/07/mrv-logo-1.png",
+    url: "https://www.mrv.com.br"
+  },
+  {
+    name: "PLAENGE",
+    logo: "https://www.plaenge.com.br/Content/images/plaenge/logo-plaenge.svg",
+    url: "https://www.plaenge.com.br"
+  },
+  {
+    name: "BRAVO",
+    logo: "https://construtora.bravo.com.br/img/logo-bravo.png",
+    url: "https://construtora.bravo.com.br"
+  },
+  {
+    name: "PIEMONTE",
+    logo: "https://www.piemonte.com.br/site-piemonte-2023/wp-content/uploads/2023/02/piemonte-logo.svg",
+    url: "https://www.piemonte.com.br"
+  },
+  {
+    name: "YTICON",
+    logo: "https://yticon.com.br/wp-content/uploads/2022/01/logo-yticon.svg",
+    url: "https://yticon.com.br"
+  },
+  {
+    name: "YOSHII",
+    logo: "https://www.yoshii.com.br/wp-content/themes/yoshii/assets/images/logo.svg",
+    url: "https://www.yoshii.com.br"
+  }
 ];
 
 const projects = [
@@ -40,22 +64,26 @@ const ProjectsSection = () => {
         {/* Companies logos */}
         <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-16">
           {companies.map((company) => (
-            <div 
-              key={company}
-              className="glass-card px-6 py-3 flex items-center gap-2 hover-lift"
+            <a 
+              key={company.name}
+              href={company.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass-card px-6 py-4 flex items-center gap-3 hover-lift group cursor-pointer"
             >
-              <Building2 className="w-5 h-5 text-accent" />
-              <span className="font-semibold text-foreground">{company}</span>
-            </div>
+              <img 
+                src={company.logo} 
+                alt={`Logo ${company.name}`}
+                className="h-8 w-auto object-contain filter brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity"
+              />
+              <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors" />
+            </a>
           ))}
-          <div className="glass-card px-6 py-3 flex items-center gap-2 hover-lift">
-            <span className="font-semibold text-muted-foreground">+ outras</span>
-          </div>
         </div>
 
         {/* Projects grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
+          {projects.map((project) => (
             <div 
               key={project.title}
               className="glass-card p-6 hover-lift group"
