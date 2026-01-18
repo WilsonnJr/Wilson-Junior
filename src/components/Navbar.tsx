@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Menu, X, Zap } from "lucide-react";
 
 const Navbar = () => {
@@ -44,13 +44,10 @@ const Navbar = () => {
 
   // Navega suavemente para uma seção
   const scrollToSection = (sectionId: string) => {
-    console.log("Navegando para:", sectionId);
     const element = document.getElementById(sectionId);
-    console.log("Elemento encontrado:", element);
     
     if (element) {
       const offsetTop = Math.max(0, element.offsetTop - 100);
-      console.log("Fazendo scroll para:", offsetTop);
       
       window.scrollTo({
         top: offsetTop,
@@ -134,35 +131,31 @@ const Navbar = () => {
         </div>
 
         {/* Menu Mobile */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              className="md:hidden bg-background/95 backdrop-blur-md border-b border-border/40"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="container py-4 space-y-2">
-                {navItems.map((item) => (
-                  <motion.button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                      activeSection === item.id
-                        ? "bg-primary/10 text-primary font-medium"
-                        : "text-foreground hover:bg-muted"
-                    }`}
-                    whileHover={{ x: 5 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {item.label}
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="md:hidden bg-background/95 backdrop-blur-md border-b border-border/40"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="container py-4 space-y-2">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                    activeSection === item.id
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </motion.nav>
 
       {/* Espaçador para evitar conteúdo ficar sob navbar */}
