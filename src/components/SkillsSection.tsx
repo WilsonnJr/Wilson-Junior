@@ -84,7 +84,7 @@ const cardVariants = {
 
 const SkillsSection = () => {
   return (
-    <section className="py-20 md:py-32 bg-secondary/30">
+    <section id="habilidades" className="py-20 md:py-32 bg-muted/30">
       <div className="container">
         <motion.h2 
           className="section-title"

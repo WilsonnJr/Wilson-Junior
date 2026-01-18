@@ -77,7 +77,7 @@ const itemVariants = {
 
 const ProjectsSection = () => {
   return (
-    <section className="py-20 md:py-32">
+    <section id="projetos" className="py-20 md:py-32">
       <div className="container">
         <motion.h2 
           className="section-title"
