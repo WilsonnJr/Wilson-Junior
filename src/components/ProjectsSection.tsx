@@ -2,9 +2,9 @@ import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
 import mrvLogo from "@/assets/mrv.png";
-import plaengeLogo from "@/assets/plaenge.jpg";
+import plaengeLogo from "@/assets/plaenge.png";
 import piemonteLogo from "@/assets/piemonte.png";
-import yticonLogo from "@/assets/yticon.jpg";
+import yticonLogo from "@/assets/yticon.png";
 import yoshiiLogo from "@/assets/yoshii.webp";
 
 const companies = [
