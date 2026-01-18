@@ -1,34 +1,35 @@
 import { ExternalLink } from "lucide-react";
 
+import mrvLogo from "@/assets/mrv.png";
+import plaengeLogo from "@/assets/plaenge.jpg";
+import piemonteLogo from "@/assets/piemonte.png";
+import yticonLogo from "@/assets/yticon.jpg";
+import yoshiiLogo from "@/assets/yoshii.webp";
+
 const companies = [
   {
     name: "MRV",
-    logo: "https://logodownload.org/wp-content/uploads/2014/07/mrv-logo-1.png",
+    logo: mrvLogo,
     url: "https://www.mrv.com.br"
   },
   {
     name: "PLAENGE",
-    logo: "https://www.plaenge.com.br/Content/images/plaenge/logo-plaenge.svg",
+    logo: plaengeLogo,
     url: "https://www.plaenge.com.br"
   },
   {
-    name: "BRAVO",
-    logo: "https://construtora.bravo.com.br/img/logo-bravo.png",
-    url: "https://construtora.bravo.com.br"
-  },
-  {
     name: "PIEMONTE",
-    logo: "https://www.piemonte.com.br/site-piemonte-2023/wp-content/uploads/2023/02/piemonte-logo.svg",
+    logo: piemonteLogo,
     url: "https://www.piemonte.com.br"
   },
   {
     name: "YTICON",
-    logo: "https://yticon.com.br/wp-content/uploads/2022/01/logo-yticon.svg",
+    logo: yticonLogo,
     url: "https://yticon.com.br"
   },
   {
     name: "YOSHII",
-    logo: "https://www.yoshii.com.br/wp-content/themes/yoshii/assets/images/logo.svg",
+    logo: yoshiiLogo,
     url: "https://www.yoshii.com.br"
   }
 ];
@@ -62,7 +63,7 @@ const ProjectsSection = () => {
         </p>
         
         {/* Companies logos */}
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-16">
+        <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 mb-16">
           {companies.map((company) => (
             <a 
               key={company.name}
@@ -74,11 +75,14 @@ const ProjectsSection = () => {
               <img 
                 src={company.logo} 
                 alt={`Logo ${company.name}`}
-                className="h-8 w-auto object-contain filter brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity"
+                className="h-8 w-auto object-contain"
               />
               <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors" />
             </a>
           ))}
+          <div className="glass-card px-6 py-4 flex items-center">
+            <span className="text-muted-foreground font-medium">entre outras</span>
+          </div>
         </div>
 
         {/* Projects grid */}
