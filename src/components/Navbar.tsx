@@ -44,9 +44,19 @@ const Navbar = () => {
 
   // Navega suavemente para uma seção
   const scrollToSection = (sectionId: string) => {
+    console.log("Navegando para:", sectionId);
     const element = document.getElementById(sectionId);
+    console.log("Elemento encontrado:", element);
+    
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const offsetTop = Math.max(0, element.offsetTop - 100);
+      console.log("Fazendo scroll para:", offsetTop);
+      
+      window.scrollTo({
+        top: offsetTop,
+        behavior: "smooth"
+      });
+      
       setActiveSection(sectionId);
       setIsOpen(false);
     }
@@ -110,9 +120,9 @@ const Navbar = () => {
 
           {/* Botão Menu Mobile */}
           <motion.button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
-            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
             {isOpen ? (

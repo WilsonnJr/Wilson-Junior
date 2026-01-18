@@ -5,7 +5,7 @@ import wilsonPhoto from "@/assets/wilson-photo.jpeg";
 
 const HeroSection = () => {
   return (
-    <section className="min-h-screen flex items-center relative overflow-hidden">
+    <section id="inicio" className="min-h-screen flex items-center relative overflow-hidden">
       {/* Background gradient effects */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div 
