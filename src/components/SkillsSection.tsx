@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { 
   Zap, 
   Lightbulb, 
@@ -58,22 +59,68 @@ const skills = [
   }
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.9 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1 as const,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut" as const
+    }
+  }
+};
+
 const SkillsSection = () => {
   return (
     <section className="py-20 md:py-32 bg-secondary/30">
       <div className="container">
-        <h2 className="section-title">Principais Habilidades</h2>
+        <motion.h2 
+          className="section-title"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
+          Principais Habilidades
+        </motion.h2>
         
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {skills.map((skill, index) => (
-            <div 
+        <motion.div 
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+        >
+          {skills.map((skill) => (
+            <motion.div 
               key={skill.title}
-              className="glass-card p-6 hover-lift group"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="glass-card p-6 hover-lift group cursor-pointer"
+              variants={cardVariants}
+              whileHover={{ 
+                scale: 1.03,
+                transition: { duration: 0.2 }
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
+              <motion.div 
+                className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors"
+                whileHover={{ rotate: 10, scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
                 <skill.icon className="w-7 h-7 text-accent" />
-              </div>
+              </motion.div>
               
               <h3 className="text-lg font-semibold font-display text-foreground mb-2">
                 {skill.title}
@@ -82,9 +129,9 @@ const SkillsSection = () => {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {skill.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
