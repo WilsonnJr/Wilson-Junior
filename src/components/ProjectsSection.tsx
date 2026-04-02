@@ -2,6 +2,10 @@ import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { lazy, Suspense } from "react";
 
+import projectResidential from "@/assets/project-residential.jpg";
+import projectCommercial from "@/assets/project-commercial.jpg";
+import projectCorporate from "@/assets/project-corporate.jpg";
+
 const LogoCarousel3D = lazy(() => import("./LogoCarousel3D"));
 
 const projects = [
@@ -10,18 +14,21 @@ const projects = [
     description:
       "Desenvolvimento completo de projetos elétricos para torres residenciais, incluindo estudos de demanda, projeto de entrada de energia, distribuição e iluminação.",
     tags: ["BIM", "Revit", "AutoCAD"],
+    image: projectResidential,
   },
   {
     title: "Complexos Comerciais",
     description:
       "Projetos integrados para centros comerciais com sistemas de CFTV, automação predial e eficiência energética.",
     tags: ["SDAI", "CFTV", "Automação"],
+    image: projectCommercial,
   },
   {
     title: "Edifícios Corporativos",
     description:
       "Soluções elétricas completas para edifícios empresariais com foco em confiabilidade e sustentabilidade.",
     tags: ["SPDA", "Luminotécnico", "BIM"],
+    image: projectCorporate,
   },
 ];
 
@@ -96,7 +103,7 @@ const ProjectsSection = () => {
           {projects.map((project) => (
             <motion.div
               key={project.title}
-              className="glass-card p-6 group cursor-pointer relative overflow-hidden"
+              className="glass-card group cursor-pointer relative overflow-hidden"
               variants={itemVariants}
               whileHover={{
                 y: -10,
@@ -118,10 +125,23 @@ const ProjectsSection = () => {
                 el.style.boxShadow = "var(--shadow-card)";
               }}
             >
+              {/* Project image */}
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  width={768}
+                  height={512}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+              </div>
+
               {/* Gradient shimmer on hover */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
 
-              <div className="relative z-10">
+              <div className="relative z-10 p-6">
                 <div className="flex items-start justify-between mb-4">
                   <h3 className="text-xl font-semibold font-display text-foreground">
                     {project.title}
