@@ -1,0 +1,95 @@
+import { useEffect, useRef, useState } from "react";
+
+const CustomCursor = () => {
+  const dotRef = useRef<HTMLDivElement>(null);
+  const circleRef = useRef<HTMLDivElement>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const mouse = useRef({ x: 0, y: 0 });
+  const circlePos = useRef({ x: 0, y: 0 });
+  const rafId = useRef<number>();
+
+  useEffect(() => {
+    // Only show on devices with fine pointer (no touch)
+    const mq = window.matchMedia("(pointer: fine)");
+    if (!mq.matches) return;
+
+    setIsVisible(true);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.current = { x: e.clientX, y: e.clientY };
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
+      }
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("a, button, [role='button'], input, textarea, select, [data-cursor-hover]")) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
+
+    const animate = () => {
+      const lerp = 0.12;
+      circlePos.current.x += (mouse.current.x - circlePos.current.x) * lerp;
+      circlePos.current.y += (mouse.current.y - circlePos.current.y) * lerp;
+      if (circleRef.current) {
+        circleRef.current.style.transform = `translate(${circlePos.current.x - 20}px, ${circlePos.current.y - 20}px)`;
+      }
+      rafId.current = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseover", handleMouseOver);
+    rafId.current = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseover", handleMouseOver);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
+  }, []);
+
+  if (!isVisible) return null;
+
+  return (
+    <>
+      {/* Dot */}
+      <div
+        ref={dotRef}
+        className="fixed top-0 left-0 z-[9999] pointer-events-none"
+        style={{
+          width: 8,
+          height: 8,
+          borderRadius: "50%",
+          background: "hsl(72 100% 50%)",
+          boxShadow: isHovering
+            ? "0 0 12px hsl(72 100% 50% / 0.9), 0 0 30px hsl(72 100% 50% / 0.5)"
+            : "0 0 8px hsl(72 100% 50% / 0.6)",
+          transition: "box-shadow 0.2s ease",
+        }}
+      />
+      {/* Circle */}
+      <div
+        ref={circleRef}
+        className="fixed top-0 left-0 z-[9998] pointer-events-none"
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          border: `1.5px solid hsl(72 100% 50% / ${isHovering ? 0.6 : 0.25})`,
+          background: `hsl(72 100% 50% / ${isHovering ? 0.05 : 0.02})`,
+          transition: "width 0.3s ease, height 0.3s ease, border-color 0.2s ease, background 0.2s ease",
+          ...(isHovering ? { width: 28, height: 28 } : {}),
+          marginLeft: isHovering ? 6 : 0,
+          marginTop: isHovering ? 6 : 0,
+        }}
+      />
+    </>
+  );
+};
+
+export default CustomCursor;
