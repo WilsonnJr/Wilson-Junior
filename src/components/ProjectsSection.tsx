@@ -2,6 +2,10 @@ import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { lazy, Suspense } from "react";
 
+import projectResidential from "@/assets/project-residential.jpg";
+import projectCommercial from "@/assets/project-commercial.jpg";
+import projectCorporate from "@/assets/project-corporate.jpg";
+
 const LogoCarousel3D = lazy(() => import("./LogoCarousel3D"));
 
 const projects = [
@@ -10,18 +14,21 @@ const projects = [
     description:
       "Desenvolvimento completo de projetos elétricos para torres residenciais, incluindo estudos de demanda, projeto de entrada de energia, distribuição e iluminação.",
     tags: ["BIM", "Revit", "AutoCAD"],
+    image: projectResidential,
   },
   {
     title: "Complexos Comerciais",
     description:
       "Projetos integrados para centros comerciais com sistemas de CFTV, automação predial e eficiência energética.",
     tags: ["SDAI", "CFTV", "Automação"],
+    image: projectCommercial,
   },
   {
     title: "Edifícios Corporativos",
     description:
       "Soluções elétricas completas para edifícios empresariais com foco em confiabilidade e sustentabilidade.",
     tags: ["SPDA", "Luminotécnico", "BIM"],
+    image: projectCorporate,
   },
 ];
 
