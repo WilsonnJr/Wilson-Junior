@@ -6,42 +6,52 @@
 
 @layer base {
   :root {
-    --background: 240 10% 6%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 94%;
 
-    --card: 240 8% 10%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 94%;
 
-    --popover: 240 8% 10%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 94%;
 
-    --primary: 244 99% 67%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 72 100% 50%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 240 6% 14%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 94%;
 
-    --muted: 240 6% 18%;
-    --muted-foreground: 240 4% 60%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 55%;
 
-    --accent: 75 100% 65%;
-    --accent-foreground: 240 10% 6%;
+    --accent: 72 100% 50%;
+    --accent-foreground: 0 0% 4%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 240 6% 20%;
-    --input: 240 6% 20%;
-    --ring: 244 99% 67%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 72 100% 50%;
 
     --radius: 0.75rem;
 
+    /* Neon tokens */
+    --neon: 72 100% 50%;
+    --neon-glow: 0 0 20px hsl(72 100% 50% / 0.4), 0 0 60px hsl(72 100% 50% / 0.15);
+    --neon-glow-strong: 0 0 20px hsl(72 100% 50% / 0.6), 0 0 80px hsl(72 100% 50% / 0.3), 0 0 120px hsl(72 100% 50% / 0.1);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(204, 255, 0, 0.15);
+    --glass-blur: 12px;
+
     /* Custom tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(244 99% 67%) 0%, hsl(280 80% 60%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(75 100% 65%) 0%, hsl(90 100% 70%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(240 8% 12%) 0%, hsl(240 10% 8%) 100%);
-    --shadow-glow: 0 0 40px hsl(75 100% 65% / 0.15);
-    --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.3);
+    --gradient-primary: linear-gradient(135deg, hsl(72 100% 50%) 0%, hsl(90 100% 60%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(72 100% 50%) 0%, hsl(85 100% 60%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 8%) 0%, hsl(0 0% 4%) 100%);
+    --shadow-glow: var(--neon-glow);
+    --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.5);
   }
 }
 
@@ -53,17 +63,30 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, hsl(0 0% 6%) 0%, hsl(0 0% 2%) 70%, hsl(0 0% 0%) 100%);
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', sans-serif;
+    color: hsl(0 0% 100%);
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-card/50 backdrop-blur-md border border-border/50 rounded-xl;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     box-shadow: var(--shadow-card);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(204, 255, 0, 0.3);
+    box-shadow: var(--neon-glow), var(--shadow-card);
   }
 
   .text-gradient {
@@ -72,16 +95,40 @@
   }
 
   .glow-accent {
-    box-shadow: var(--shadow-glow);
+    box-shadow: var(--neon-glow);
+  }
+
+  .glow-accent-strong {
+    box-shadow: var(--neon-glow-strong);
   }
 
   .section-title {
-    @apply flex items-center gap-3 text-xl md:text-2xl font-semibold text-foreground mb-8;
+    @apply flex items-center gap-3 text-xl md:text-2xl font-semibold mb-8;
+    color: hsl(0 0% 100%);
   }
 
   .section-title::before {
     content: '';
-    @apply w-1 h-6 md:h-8 bg-accent rounded-full;
+    @apply w-1 h-6 md:h-8 rounded-full;
+    background: hsl(var(--neon));
+    box-shadow: 0 0 10px hsl(72 100% 50% / 0.5);
+  }
+
+  /* Neon link underline effect */
+  .neon-underline {
+    @apply relative;
+  }
+
+  .neon-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-1/2 w-0 h-0.5 transition-all duration-300;
+    background: hsl(var(--neon));
+    box-shadow: 0 0 8px hsl(72 100% 50% / 0.5);
+    transform: translateX(-50%);
+  }
+
+  .neon-underline:hover::after {
+    @apply w-full;
   }
 }
 
@@ -110,16 +157,32 @@
     }
   }
 
+  @keyframes breathe {
+    0%, 100% { box-shadow: var(--neon-glow); }
+    50% { box-shadow: var(--neon-glow-strong); }
+  }
+
+  .animate-breathe {
+    animation: breathe 3s ease-in-out infinite;
+  }
+
   .hover-lift {
     @apply transition-all duration-300;
   }
 
   .hover-lift:hover {
     @apply -translate-y-1;
-    box-shadow: var(--shadow-glow);
+    box-shadow: var(--neon-glow);
   }
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Hide default cursor when custom cursor is active */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
 }
