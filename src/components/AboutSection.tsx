@@ -1,4 +1,7 @@
 import { motion } from "framer-motion";
+import { lazy, Suspense } from "react";
+
+const FloatingTechElements = lazy(() => import("./FloatingTechElements"));
 
 const AboutSection = () => {
   return (
@@ -45,43 +48,35 @@ const AboutSection = () => {
             >
               Ao longo da minha carreira, desenvolvi expertise em diversas áreas da engenharia elétrica, sempre buscando soluções inovadoras e eficientes para cada projeto.
             </motion.p>
+
+            <motion.div
+              className="glass-card p-6 mt-6 inline-flex items-center gap-4"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.8, type: "spring", stiffness: 120 }}
+            >
+              <span className="text-5xl font-bold font-display text-gradient">4+</span>
+              <div>
+                <p className="text-foreground font-medium">Anos de experiência</p>
+                <p className="text-muted-foreground text-sm">Especialidade em projetos integrados</p>
+              </div>
+            </motion.div>
           </motion.div>
           
           <motion.div 
-            className="glass-card p-8 md:p-12 text-center"
-            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.3, type: "spring", stiffness: 100 }}
-            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <motion.div 
-              className="mb-4"
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.5, type: "spring", stiffness: 200 }}
-            >
-              <span className="text-7xl md:text-8xl font-bold font-display text-gradient">4+</span>
-            </motion.div>
-            <motion.p 
-              className="text-xl md:text-2xl text-foreground font-medium"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-            >
-              Anos de experiência profissional
-            </motion.p>
-            <motion.p 
-              className="text-muted-foreground mt-2"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.9 }}
-            >
-              Especialidade em projetos integrados
-            </motion.p>
+            <Suspense fallback={
+              <div className="w-full h-[400px] md:h-[500px] glass-card flex items-center justify-center">
+                <div className="animate-breathe w-4 h-4 rounded-full bg-primary" />
+              </div>
+            }>
+              <FloatingTechElements />
+            </Suspense>
           </motion.div>
         </div>
       </div>
