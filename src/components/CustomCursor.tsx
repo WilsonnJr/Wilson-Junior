@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 
+const TRAIL_COUNT = 8;
+
 const CustomCursor = () => {
   const dotRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
+  const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const mouse = useRef({ x: 0, y: 0 });
   const circlePos = useRef({ x: 0, y: 0 });
+  const trailPositions = useRef(
+    Array.from({ length: TRAIL_COUNT }, () => ({ x: 0, y: 0 }))
+  );
   const rafId = useRef<number>();
 
   useEffect(() => {
-    // Only show on devices with fine pointer (no touch)
     const mq = window.matchMedia("(pointer: fine)");
     if (!mq.matches) return;
 
@@ -39,6 +44,20 @@ const CustomCursor = () => {
       if (circleRef.current) {
         circleRef.current.style.transform = `translate(${circlePos.current.x - 20}px, ${circlePos.current.y - 20}px)`;
       }
+
+      // Trail
+      for (let i = 0; i < TRAIL_COUNT; i++) {
+        const target = i === 0 ? mouse.current : trailPositions.current[i - 1];
+        const speed = 0.15 - i * 0.012;
+        trailPositions.current[i].x += (target.x - trailPositions.current[i].x) * speed;
+        trailPositions.current[i].y += (target.y - trailPositions.current[i].y) * speed;
+        const el = trailRefs.current[i];
+        if (el) {
+          const size = 6 - i * 0.5;
+          el.style.transform = `translate(${trailPositions.current[i].x - size / 2}px, ${trailPositions.current[i].y - size / 2}px)`;
+        }
+      }
+
       rafId.current = requestAnimationFrame(animate);
     };
 
@@ -57,6 +76,25 @@ const CustomCursor = () => {
 
   return (
     <>
+      {/* Trail particles */}
+      {Array.from({ length: TRAIL_COUNT }).map((_, i) => {
+        const size = 6 - i * 0.5;
+        const opacity = 0.5 - i * 0.055;
+        return (
+          <div
+            key={`trail-${i}`}
+            ref={(el) => { trailRefs.current[i] = el; }}
+            className="fixed top-0 left-0 z-[9997] pointer-events-none"
+            style={{
+              width: size,
+              height: size,
+              borderRadius: "50%",
+              background: `hsl(72 100% 50% / ${opacity})`,
+              boxShadow: `0 0 ${4 + i}px hsl(72 100% 50% / ${opacity * 0.6})`,
+            }}
+          />
+        );
+      })}
       {/* Dot */}
       <div
         ref={dotRef}

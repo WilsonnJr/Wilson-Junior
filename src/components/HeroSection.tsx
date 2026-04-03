@@ -175,23 +175,6 @@ const HeroSection = () => {
             AutoCAD.
           </motion.p>
 
-          {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            <Button
-              asChild
-              size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold px-8 py-6 text-base rounded-full glow-accent"
-            >
-              <a href="#sobre-mim">
-                Sobre mim
-                <ChevronDown className="ml-2 h-5 w-5" />
-              </a>
-            </Button>
-          </motion.div>
         </motion.div>
       </div>
 

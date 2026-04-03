@@ -8,6 +8,7 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 import ParticleBackground from "@/components/ParticleBackground";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import useSmoothScroll from "@/hooks/use-smooth-scroll";
 
 const Index = () => {
@@ -16,6 +17,7 @@ const Index = () => {
     <div className="min-h-screen bg-background relative">
       <CustomCursor />
       <ParticleBackground />
+      <FloatingWhatsApp />
       <div className="relative z-10">
         <Navbar />
         <HeroSection />
