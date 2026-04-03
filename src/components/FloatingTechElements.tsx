@@ -40,9 +40,7 @@ function OrbitRing({ tiltX, tiltZ }: { tiltX: number; tiltZ: number }) {
 
   return (
     <group rotation={[tiltX, 0, tiltZ]}>
-      <line geometry={geometry}>
-        <lineBasicMaterial color="#22c55e" transparent opacity={0.12} />
-      </line>
+      <primitive object={new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: "#22c55e", transparent: true, opacity: 0.12 }))} />
     </group>
   );
 }
