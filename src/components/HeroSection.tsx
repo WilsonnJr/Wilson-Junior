@@ -98,7 +98,7 @@ const HeroSection = () => {
             transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
           >
             {/* Sound wave bars behind */}
-            <div className="absolute -inset-16 md:-inset-24">
+            <div className="absolute -inset-32 sm:-inset-40 md:-inset-52 lg:-inset-64">
               <SoundWaveBars />
             </div>
 
