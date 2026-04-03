@@ -1,7 +1,6 @@
 import { useRef, useCallback } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import wilsonPhoto from "@/assets/wilson-photo.jpeg";
 
 // Sound wave bars component
