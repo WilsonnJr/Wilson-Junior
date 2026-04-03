@@ -6,7 +6,7 @@ import wilsonPhoto from "@/assets/wilson-photo.jpeg";
 
 // Sound wave bars component
 const SoundWaveBars = () => {
-  const barCount = 40;
+  const barCount = 60;
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       <div className="flex items-center gap-[3px] h-full w-full justify-center opacity-30">
