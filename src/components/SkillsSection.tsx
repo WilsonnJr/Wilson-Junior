@@ -86,7 +86,7 @@ const SkillsSection = () => {
             return (
               <motion.div
                 key={skill.title}
-                className={`relative flex items-center mb-8 last:mb-0 ${
+                className={`relative flex items-center mb-4 last:mb-0 ${
                   isLeft ? "justify-start" : "justify-end"
                 }`}
                 initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
