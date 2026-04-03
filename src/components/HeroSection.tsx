@@ -1,6 +1,6 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useCallback } from "react";
 import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import wilsonPhoto from "@/assets/wilson-photo.jpeg";
 
