@@ -1,12 +1,11 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useCallback } from "react";
 import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import wilsonPhoto from "@/assets/wilson-photo.jpeg";
 
 // Sound wave bars component
 const SoundWaveBars = () => {
-  const barCount = 40;
+  const barCount = 60;
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       <div className="flex items-center gap-[3px] h-full w-full justify-center opacity-30">
@@ -98,7 +97,7 @@ const HeroSection = () => {
             transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
           >
             {/* Sound wave bars behind */}
-            <div className="absolute -inset-16 md:-inset-24">
+            <div className="absolute -inset-32 sm:-inset-40 md:-inset-52 lg:-inset-64">
               <SoundWaveBars />
             </div>
 
@@ -146,37 +145,6 @@ const HeroSection = () => {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* Floating badge "4+ Anos" */}
-            <motion.div
-              className="absolute -right-4 top-4 md:-right-8 md:top-6 glass-card px-4 py-2 flex flex-col items-center"
-              style={{
-                border: "1px solid hsl(72 100% 50% / 0.3)",
-                boxShadow: "0 0 15px hsl(72 100% 50% / 0.15)",
-              }}
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-2xl md:text-3xl font-bold font-display text-gradient">4+</span>
-              <span className="text-[10px] md:text-xs text-muted-foreground whitespace-nowrap">Anos de exp.</span>
-            </motion.div>
-
-            {/* Badge "Experiência Elétrica" */}
-            <motion.div
-              className="absolute -left-4 bottom-4 md:-left-12 md:bottom-6 glass-card px-3 py-2"
-              style={{
-                border: "1px solid hsl(72 100% 50% / 0.2)",
-              }}
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-[10px] md:text-xs text-accent font-medium">⚡ Especialista BIM</span>
-            </motion.div>
           </motion.div>
 
           {/* Name */}
@@ -206,23 +174,6 @@ const HeroSection = () => {
             AutoCAD.
           </motion.p>
 
-          {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            <Button
-              asChild
-              size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold px-8 py-6 text-base rounded-full glow-accent"
-            >
-              <a href="#sobre-mim">
-                Sobre mim
-                <ChevronDown className="ml-2 h-5 w-5" />
-              </a>
-            </Button>
-          </motion.div>
         </motion.div>
       </div>
 
