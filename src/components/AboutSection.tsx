@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
-import { lazy, Suspense } from "react";
-
-const FloatingTechElements = lazy(() => import("./FloatingTechElements"));
+import aboutImg from "@/assets/about-workspace.jpg";
 
 const AboutSection = () => {
   return (
@@ -65,18 +63,27 @@ const AboutSection = () => {
           </motion.div>
           
           <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
+            className="relative group"
+            initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <Suspense fallback={
-              <div className="w-full h-[400px] md:h-[500px] glass-card flex items-center justify-center">
-                <div className="animate-breathe w-4 h-4 rounded-full bg-primary" />
-              </div>
-            }>
-              <FloatingTechElements />
-            </Suspense>
+            {/* Glow border effect */}
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary/30 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+            
+            <div className="relative overflow-hidden rounded-2xl border border-border/50">
+              <img
+                src={aboutImg}
+                alt="Workspace de engenharia elétrica com modelo BIM e plantas técnicas"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+            </div>
           </motion.div>
         </div>
       </div>
