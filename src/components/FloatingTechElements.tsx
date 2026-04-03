@@ -1,5 +1,7 @@
-import { motion } from "framer-motion";
-import { Zap } from "lucide-react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Text, Float } from "@react-three/drei";
+import { useRef, useMemo } from "react";
+import * as THREE from "three";
 
 const electricSymbols = [
   { symbol: "Ω", name: "Resistência" },
@@ -12,202 +14,197 @@ const electricSymbols = [
   { symbol: "Φ", name: "Fluxo" },
 ];
 
-const AtomOrbit = ({
-  children,
-  duration,
-  rotateX,
-  rotateY,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  duration: number;
-  rotateX: number;
-  rotateY: number;
-  delay?: number;
-}) => (
-  <div
-    className="absolute inset-0"
-    style={{
-      transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-      transformStyle: "preserve-3d",
-    }}
-  >
-    <motion.div
-      className="absolute inset-0"
-      style={{ transformStyle: "preserve-3d" }}
-      animate={{ rotateZ: [0, 360] }}
-      transition={{
-        duration,
-        repeat: Infinity,
-        ease: "linear",
-        delay,
-      }}
-    >
-      {children}
-    </motion.div>
-  </div>
-);
+const orbits = [
+  { tiltX: Math.PI * 0.35, tiltZ: 0, speed: 0.15 },
+  { tiltX: -Math.PI * 0.1, tiltZ: Math.PI * 0.33, speed: 0.12 },
+  { tiltX: Math.PI * 0.15, tiltZ: -Math.PI * 0.25, speed: 0.1 },
+];
 
-const OrbitParticle = ({
+const symbolAssign = [
+  [0, 1, 2],
+  [3, 4],
+  [5, 6, 7],
+];
+
+function OrbitRing({ tiltX, tiltZ }: { tiltX: number; tiltZ: number }) {
+  const points = useMemo(() => {
+    const pts: THREE.Vector3[] = [];
+    for (let i = 0; i <= 128; i++) {
+      const angle = (i / 128) * Math.PI * 2;
+      pts.push(new THREE.Vector3(Math.cos(angle) * 2.8, Math.sin(angle) * 2.8, 0));
+    }
+    return pts;
+  }, []);
+
+  const geometry = useMemo(() => new THREE.BufferGeometry().setFromPoints(points), [points]);
+
+  return (
+    <group rotation={[tiltX, 0, tiltZ]}>
+      <line geometry={geometry}>
+        <lineBasicMaterial color="#22c55e" transparent opacity={0.12} />
+      </line>
+    </group>
+  );
+}
+
+function OrbitingSymbol({
   symbol,
-  name,
-  angle,
-  radius,
+  orbitIndex,
+  indexInOrbit,
+  totalInOrbit,
 }: {
   symbol: string;
-  name: string;
-  angle: number;
-  radius: number;
-}) => {
-  const rad = (angle * Math.PI) / 180;
-  const x = Math.cos(rad) * radius;
-  const y = Math.sin(rad) * radius;
+  orbitIndex: number;
+  indexInOrbit: number;
+  totalInOrbit: number;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const orbit = orbits[orbitIndex];
+  const radius = 2.8;
+  const baseAngle = (indexInOrbit / totalInOrbit) * Math.PI * 2;
+
+  useFrame(({ clock }) => {
+    if (!groupRef.current) return;
+    const t = clock.getElapsedTime() * orbit.speed + baseAngle;
+    const x = Math.cos(t) * radius;
+    const y = Math.sin(t) * radius;
+
+    // Apply orbit tilt
+    const cosX = Math.cos(orbit.tiltX);
+    const sinX = Math.sin(orbit.tiltX);
+    const cosZ = Math.cos(orbit.tiltZ);
+    const sinZ = Math.sin(orbit.tiltZ);
+
+    // Rotate around X then Z
+    const y1 = y * cosX;
+    const z1 = -y * sinX;
+    const x2 = x * cosZ - y1 * sinZ;
+    const y2 = x * sinZ + y1 * cosZ;
+
+    groupRef.current.position.set(x2, y2, z1);
+  });
 
   return (
-    <motion.div
-      className="absolute flex flex-col items-center gap-0.5"
-      style={{
-        left: "50%",
-        top: "50%",
-        transform: `translate(${x}px, ${y}px) translate(-50%, -50%)`,
-      }}
-    >
-      <motion.div
-        className="w-10 h-10 rounded-full glass-card flex items-center justify-center border border-primary/30 shadow-[0_0_15px_hsl(var(--primary)/0.2)]"
-        whileHover={{
-          scale: 1.4,
-          boxShadow: "0 0 35px hsl(var(--primary) / 0.6)",
-        }}
-        transition={{ type: "spring", stiffness: 300 }}
-      >
-        <span className="text-sm font-bold text-primary font-mono">{symbol}</span>
-      </motion.div>
-      <span className="text-[8px] font-medium text-muted-foreground whitespace-nowrap opacity-70">
-        {name}
-      </span>
-    </motion.div>
+    <group ref={groupRef}>
+      <Float speed={2} rotationIntensity={0} floatIntensity={0.3}>
+        <Text
+          fontSize={0.45}
+          color="#22c55e"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/Inter-Bold.woff"
+          outlineWidth={0.02}
+          outlineColor="#000000"
+        >
+          {symbol}
+        </Text>
+        {/* Glow sprite behind text */}
+        <sprite scale={[1.2, 1.2, 1]}>
+          <spriteMaterial color="#22c55e" transparent opacity={0.08} />
+        </sprite>
+      </Float>
+    </group>
   );
-};
+}
+
+function LightningBolt() {
+  const meshRef = useRef<THREE.Group>(null);
+
+  const shape = useMemo(() => {
+    const s = new THREE.Shape();
+    // Lightning bolt shape
+    s.moveTo(0.15, 0.8);
+    s.lineTo(-0.3, 0.15);
+    s.lineTo(0.0, 0.15);
+    s.lineTo(-0.15, -0.8);
+    s.lineTo(0.3, -0.15);
+    s.lineTo(0.0, -0.15);
+    s.closePath();
+    return s;
+  }, []);
+
+  const geometry = useMemo(() => {
+    return new THREE.ExtrudeGeometry(shape, {
+      depth: 0.15,
+      bevelEnabled: true,
+      bevelThickness: 0.03,
+      bevelSize: 0.03,
+      bevelSegments: 3,
+    });
+  }, [shape]);
+
+  useFrame(({ clock }) => {
+    if (!meshRef.current) return;
+    meshRef.current.rotation.y = Math.sin(clock.getElapsedTime() * 0.5) * 0.3;
+  });
+
+  return (
+    <group ref={meshRef}>
+      <mesh geometry={geometry} position={[0, 0, -0.075]}>
+        <meshStandardMaterial
+          color="#22c55e"
+          emissive="#22c55e"
+          emissiveIntensity={1.5}
+          metalness={0.8}
+          roughness={0.2}
+        />
+      </mesh>
+      {/* Glow */}
+      <pointLight color="#22c55e" intensity={3} distance={5} decay={2} />
+    </group>
+  );
+}
+
+function Scene() {
+  const sceneRef = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (!sceneRef.current) return;
+    sceneRef.current.rotation.y = Math.sin(clock.getElapsedTime() * 0.1) * 0.15;
+  });
+
+  return (
+    <group ref={sceneRef}>
+      <ambientLight intensity={0.3} />
+      <directionalLight position={[5, 5, 5]} intensity={0.5} />
+
+      {/* Lightning bolt nucleus */}
+      <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
+        <LightningBolt />
+      </Float>
+
+      {/* Orbit rings */}
+      {orbits.map((o, i) => (
+        <OrbitRing key={i} tiltX={o.tiltX} tiltZ={o.tiltZ} />
+      ))}
+
+      {/* Orbiting symbols */}
+      {symbolAssign.map((indices, orbitIdx) =>
+        indices.map((symIdx, i) => (
+          <OrbitingSymbol
+            key={electricSymbols[symIdx].symbol}
+            symbol={electricSymbols[symIdx].symbol}
+            orbitIndex={orbitIdx}
+            indexInOrbit={i}
+            totalInOrbit={indices.length}
+          />
+        ))
+      )}
+    </group>
+  );
+}
 
 const FloatingTechElements = () => {
-  const radius = 130;
-
-  // Split symbols into 3 orbits
-  const orbit1 = electricSymbols.slice(0, 3);
-  const orbit2 = electricSymbols.slice(3, 5);
-  const orbit3 = electricSymbols.slice(5, 8);
-
   return (
-    <div className="w-full h-[400px] md:h-[500px] flex items-center justify-center relative">
-      <div
-        className="relative w-[320px] h-[320px]"
-        style={{ perspective: "800px", transformStyle: "preserve-3d" }}
+    <div className="w-full h-[400px] md:h-[500px]">
+      <Canvas
+        camera={{ position: [0, 0, 7], fov: 50 }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, alpha: true }}
+        style={{ background: "transparent" }}
       >
-        {/* Orbit ring trails */}
-        {[
-          { rx: 65, ry: 0 },
-          { rx: -20, ry: 60 },
-          { rx: 30, ry: -45 },
-        ].map((r, i) => (
-          <div
-            key={i}
-            className="absolute inset-0 flex items-center justify-center"
-            style={{
-              transform: `rotateX(${r.rx}deg) rotateY(${r.ry}deg)`,
-              transformStyle: "preserve-3d",
-            }}
-          >
-            <motion.div
-              className="w-[260px] h-[260px] rounded-full border border-primary/10"
-              animate={{ opacity: [0.15, 0.35, 0.15] }}
-              transition={{
-                duration: 4,
-                delay: i * 1.2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          </div>
-        ))}
-
-        {/* Pulse rings behind core */}
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={`pulse-${i}`}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/15"
-            style={{ width: 80 + i * 30, height: 80 + i * 30 }}
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.3, 0.05, 0.3],
-            }}
-            transition={{
-              duration: 3.5,
-              delay: i * 0.6,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
-        {/* Center nucleus - Lightning bolt */}
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-20 h-20 rounded-full glass-card flex items-center justify-center border border-primary/50 shadow-[0_0_40px_hsl(var(--primary)/0.3)]"
-          animate={{
-            boxShadow: [
-              "0 0 30px hsl(var(--primary) / 0.2)",
-              "0 0 60px hsl(var(--primary) / 0.5)",
-              "0 0 30px hsl(var(--primary) / 0.2)",
-            ],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <motion.div
-            animate={{ scale: [1, 1.15, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Zap className="w-9 h-9 text-primary fill-primary/30" />
-          </motion.div>
-        </motion.div>
-
-        {/* Orbit 1 - tilted like atom */}
-        <AtomOrbit duration={25} rotateX={65} rotateY={0}>
-          {orbit1.map((item, i) => (
-            <OrbitParticle
-              key={item.symbol}
-              symbol={item.symbol}
-              name={item.name}
-              angle={(i / orbit1.length) * 360}
-              radius={radius}
-            />
-          ))}
-        </AtomOrbit>
-
-        {/* Orbit 2 - different tilt */}
-        <AtomOrbit duration={30} rotateX={-20} rotateY={60} delay={2}>
-          {orbit2.map((item, i) => (
-            <OrbitParticle
-              key={item.symbol}
-              symbol={item.symbol}
-              name={item.name}
-              angle={(i / orbit2.length) * 360}
-              radius={radius}
-            />
-          ))}
-        </AtomOrbit>
-
-        {/* Orbit 3 - another tilt */}
-        <AtomOrbit duration={35} rotateX={30} rotateY={-45} delay={4}>
-          {orbit3.map((item, i) => (
-            <OrbitParticle
-              key={item.symbol}
-              symbol={item.symbol}
-              name={item.name}
-              angle={(i / orbit3.length) * 360}
-              radius={radius}
-            />
-          ))}
-        </AtomOrbit>
-      </div>
+        <Scene />
+      </Canvas>
     </div>
   );
 };
