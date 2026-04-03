@@ -220,8 +220,10 @@ const ContactSection = () => {
               />
 
               <motion.a
-                href="mailto:wilsonjuniorlive10271@gmail.com"
-                className="relative inline-flex items-center justify-center px-12 py-5 text-lg font-bold font-display rounded-full bg-accent text-accent-foreground overflow-hidden"
+                href="https://wa.me/5543984479229?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative inline-flex items-center justify-center gap-2 px-12 py-5 text-lg font-bold font-display rounded-full bg-accent text-accent-foreground overflow-hidden"
                 style={{
                   boxShadow:
                     "0 0 20px hsl(72 100% 50% / 0.5), 0 0 60px hsl(72 100% 50% / 0.2)",
@@ -259,7 +261,8 @@ const ContactSection = () => {
                     repeatDelay: 2,
                   }}
                 />
-                <span className="relative z-10">⚡ Iniciar Conversa</span>
+                <MessageCircle className="w-5 h-5 relative z-10" />
+                <span className="relative z-10">Solicitar Orçamento</span>
 
                 {/* Spark particles */}
                 <AnimatePresence>

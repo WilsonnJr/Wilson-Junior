@@ -8,7 +8,7 @@ const SoundWaveBars = () => {
   const barCount = 60;
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div className="flex items-center gap-[3px] h-full w-full justify-center opacity-30">
+      <div className="flex items-center gap-[3px] h-full w-full justify-center opacity-50 md:opacity-60">
         {Array.from({ length: barCount }).map((_, i) => {
           const delay = Math.random() * 2;
           const duration = 0.8 + Math.random() * 1.2;
